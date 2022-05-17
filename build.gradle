@@ -13,12 +13,9 @@ plugins {
 }
 
 dependencies {
-    implementation 'info.picocli:picocli:4.6.2'
-    annotationProcessor 'info.picocli:picocli-codegen:4.6.2'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.1'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.2'
+    implementation group: 'io.javalin', name: 'javalin', version: '4.6.0'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.slf4j:slf4j-simple:1.7.36'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 }
 
