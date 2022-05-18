@@ -6,7 +6,7 @@ public class App {
     public static void main(String[] args) {
         Javalin app = getApp();
         app.start(8080);
-        app.get("/", ctx -> ctx.result("Hello World"));
+        app.get("/", ctx -> ctx.result("Hello World!"));
     }
 
     public static Javalin getApp() {
