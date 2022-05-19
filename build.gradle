@@ -73,3 +73,5 @@ jacocoTestReport {
         xml.required = true
     }
 }
+
+defaultTasks "clean", "build", "installApp"
