@@ -1,0 +1,16 @@
+datasource:
+    development:
+      username: sa
+      password: sa
+      url: "jdbc:h2:./database"
+    production:
+        username: app
+        password: password
+        url: jdbc:postgresql://localhost:5432/app
+
+ebean:
+  db:
+    ddl:
+      generate: true
+      run: true
+      seedSql: seed.sql
