@@ -5,8 +5,16 @@ import io.javalin.Javalin;
 public class App {
     public static void main(String[] args) {
         Javalin app = getApp();
-        app.start(5000);
+        app.start(getPort());
         app.get("/", ctx -> ctx.result("Hello World!"));
+    }
+
+    private static int getPort() {
+        String port = System.getenv("PORT");
+        if (port != null) {
+            return Integer.valueOf(port);
+        }
+        return 5000;
     }
 
     public static Javalin getApp() {
