@@ -26,6 +26,9 @@ dependencies {
     implementation 'com.h2database:h2:2.1.212'
     implementation 'javax.xml.bind:jaxb-api:2.3.0'
     implementation 'com.sun.xml.bind:jaxb-ri:2.3.3'
+    implementation 'org.thymeleaf:thymeleaf:3.0.12.RELEASE'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.0.0'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE'
 
     annotationProcessor 'io.ebean:querybean-generator:13.6.0'
 
@@ -41,7 +44,7 @@ application {
 }
 
 compileJava {
-    options.release = 16
+    //options.release = 16
     options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
 }
 
