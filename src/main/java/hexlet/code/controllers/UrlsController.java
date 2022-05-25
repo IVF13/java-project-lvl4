@@ -68,15 +68,15 @@ public final class UrlsController {
             return;
         }
 
-        if (new QUrl().name.equalTo(inputURL.getHost() + inputURL.getPort()).findOne() != null) {
+        String name = inputURL.getProtocol() + "://" + inputURL.getHost();
+        if (inputURL.getPort() != -1) {
+            name += ":" + inputURL.getPort();
+        }
+
+        if (new QUrl().name.equalTo(name).findOne() != null) {
             ctx.sessionAttribute("flash", "Page already exists");
             ctx.sessionAttribute("flash-type", "success");
         } else {
-            String name = inputURL.getProtocol() + "://" + inputURL.getHost();
-            if (inputURL.getPort() != -1) {
-                name += ":" + inputURL.getPort();
-            }
-
             Url url = new Url();
             url.setName(name);
             url.save();
