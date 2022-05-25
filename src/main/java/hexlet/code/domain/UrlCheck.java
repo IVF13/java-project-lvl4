@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class UrlCheck {
+public final class UrlCheck {
 
     @Id
     private long id;
@@ -19,17 +19,13 @@ public class UrlCheck {
 
     @Lob
     private String description;
-    
+
     @ManyToOne
     @JoinColumn(name = "url_id")
     private Url url;
 
     @WhenCreated
     private Date createdAt;
-
-    public Url getUrl() {
-        return url;
-    }
 
     public UrlCheck() {
     }
@@ -61,6 +57,10 @@ public class UrlCheck {
 
     public String getDescription() {
         return description;
+    }
+
+    public Url getUrl() {
+        return url;
     }
 
     public Date getCreatedAt() {
