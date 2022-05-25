@@ -1,5 +1,7 @@
 package hexlet.code;
 
+import hexlet.code.controllers.RootController;
+import hexlet.code.controllers.UrlsController;
 import io.javalin.Javalin;
 import io.javalin.plugin.rendering.template.JavalinThymeleaf;
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
@@ -7,32 +9,21 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
-public class App {
-    public static void main(String[] args) {
-        Javalin app = getApp();
-        app.start(getPort());
-        app.get("/", ctx -> ctx.result("Hello World!"));
-    }
+import static io.javalin.apibuilder.ApiBuilder.*;
+
+public final class App {
 
     private static int getPort() {
-        String port = System.getenv("PORT");
-        if (port != null) {
-            return Integer.valueOf(port);
-        }
-        return 5000;
+        String port = System.getenv().getOrDefault("PORT", "5000");
+        return Integer.valueOf(port);
     }
 
-    public static Javalin getApp() {
+    private static String getMode() {
+        return System.getenv().getOrDefault("APP_ENV", "development");
+    }
 
-        // Создаём приложение
-        Javalin app = Javalin.create(config -> {
-            // Включаем логгирование
-            config.enableDevLogging();
-            config.enableWebjars();
-            JavalinThymeleaf.configure(getTemplateEngine());
-        });
-
-        return app;
+    private static boolean isProduction() {
+        return getMode().equals("production");
     }
 
     private static TemplateEngine getTemplateEngine() {
@@ -48,4 +39,41 @@ public class App {
         return templateEngine;
     }
 
+    private static void addRoutes(Javalin app) {
+        app.get("/", RootController.welcome);
+        //app.get("/about", RootController.about);
+
+        app.routes(() -> {
+            path("urls", () -> {
+                get(UrlsController.listUrls);
+                post(UrlsController.create);
+                path("{id}", () -> {
+                    get(UrlsController.showUrl);
+                });
+            });
+        });
+    }
+
+    public static Javalin getApp() {
+        Javalin app = Javalin.create(config -> {
+            if (!isProduction()) {
+                config.enableDevLogging();
+            }
+            config.enableWebjars();
+            JavalinThymeleaf.configure(getTemplateEngine());
+        });
+
+        addRoutes(app);
+
+        app.before(ctx -> {
+            ctx.attribute("ctx", ctx);
+        });
+
+        return app;
+    }
+
+    public static void main(String[] args) {
+        Javalin app = getApp();
+        app.start(getPort());
+    }
 }
