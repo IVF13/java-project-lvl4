@@ -16,7 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ControllersTest {
+public final class ControllersTest {
     private static Javalin app;
     private static String baseUrl;
     private static Url existingUrl;
@@ -110,7 +110,7 @@ public class ControllersTest {
                     .field("url", inputURL)
                     .asString();
 
-            List<Url> urls= new QUrl().name.equalTo(inputURL).findList();
+            List<Url> urls = new QUrl().name.equalTo(inputURL).findList();
 
             assertThat(response.getStatus()).isEqualTo(302);
             assertThat(urls.size()).isEqualTo(1);
