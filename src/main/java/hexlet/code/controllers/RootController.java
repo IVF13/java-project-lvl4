@@ -8,8 +8,4 @@ public final class RootController {
         ctx.render("index.html");
     };
 
-    public static Handler about = ctx -> {
-        ctx.render("about.html");
-    };
-
 }
