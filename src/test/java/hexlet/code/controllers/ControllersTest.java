@@ -2,6 +2,7 @@ package hexlet.code.controllers;
 
 import hexlet.code.App;
 import hexlet.code.domain.Url;
+import hexlet.code.domain.UrlCheck;
 import hexlet.code.domain.query.QUrl;
 import io.ebean.DB;
 import io.ebean.Transaction;
@@ -20,7 +21,9 @@ public final class ControllersTest {
     private static Javalin app;
     private static String baseUrl;
     private static Url existingUrl;
+    private static UrlCheck existingUrlCheck;
     private static Transaction transaction;
+    private static String inputURL = "https://www.example.com";
 
     @BeforeAll
     public static void beforeAll() {
@@ -32,6 +35,10 @@ public final class ControllersTest {
         existingUrl = new Url();
         existingUrl.setName("https://ru.hexlet.io");
         existingUrl.save();
+
+        existingUrlCheck = new UrlCheck();
+        existingUrlCheck.setUrl(new QUrl().name.equalTo(existingUrl.getName()).findOne());
+        existingUrlCheck.save();
     }
 
     @AfterAll
@@ -85,7 +92,6 @@ public final class ControllersTest {
 
         @Test
         void testCreate() {
-            String inputURL = "https://www.example.com";
             HttpResponse<String> response = Unirest
                     .post(baseUrl + "/urls")
                     .field("url", inputURL)
@@ -99,8 +105,6 @@ public final class ControllersTest {
 
         @Test
         void testAlreadyExists() {
-            String inputURL = "https://www.example.com";
-
             Unirest.post(baseUrl + "/urls")
                     .field("url", inputURL)
                     .asString();
