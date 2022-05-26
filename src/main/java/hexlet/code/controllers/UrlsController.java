@@ -1,6 +1,7 @@
 package hexlet.code.controllers;
 
 import hexlet.code.domain.Url;
+import hexlet.code.domain.UrlCheck;
 import hexlet.code.domain.query.QUrl;
 import io.ebean.PagedList;
 import io.javalin.http.Handler;
@@ -8,6 +9,7 @@ import io.javalin.http.NotFoundResponse;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -43,19 +45,13 @@ public final class UrlsController {
     public static Handler showUrl = ctx -> {
         int id = ctx.pathParamAsClass("id", Integer.class).getOrDefault(null);
 
-        Url url = new QUrl()
-                .id.equalTo(id)
-                .findOne();
-
-        if (url == null) {
-            throw new NotFoundResponse();
-        }
+        Url url = findUrl(id);
 
         ctx.attribute("url", url);
         ctx.render("urls/show.html");
     };
 
-    public static Handler create = ctx -> {
+    public static Handler createUrl = ctx -> {
         URL inputURL;
 
         try {
@@ -73,7 +69,7 @@ public final class UrlsController {
             name += ":" + inputURL.getPort();
         }
 
-        if (new QUrl().name.equalTo(name).findOne() != null) {
+        if (findUrl(name) != null) {
             ctx.sessionAttribute("flash", "Page already exists");
             ctx.sessionAttribute("flash-type", "success");
         } else {
@@ -85,8 +81,51 @@ public final class UrlsController {
             ctx.sessionAttribute("flash-type", "success");
         }
 
+        runCheck(findUrl(name).getId());
+
         ctx.redirect("/urls");
     };
 
+    public static Handler createCheck = ctx -> {
+        long id = ctx.pathParamAsClass("id", Integer.class).getOrDefault(null);
+
+        runCheck(id);
+
+        ctx.redirect("/urls/" + id);
+    };
+
+    private static void runCheck(long id) {
+        UrlCheck urlCheck = new UrlCheck();
+        Url url = findUrl(id);
+        //установка параметров
+        urlCheck.setTitle("LOL2");
+        urlCheck.setUrl(url);
+        urlCheck.setStatusCode(200);
+
+        List<UrlCheck> urlChecks = new ArrayList<>();
+        urlChecks.add(urlCheck);
+
+        urlCheck.save();
+    }
+
+    private static Url findUrl(long id) {
+        Url url = new QUrl()
+                .id.equalTo(id)
+                .findOne();
+
+        if (url == null) {
+            throw new NotFoundResponse();
+        }
+
+        return url;
+    }
+
+    private static Url findUrl(String name) {
+        Url url = new QUrl()
+                .name.equalTo(name)
+                .findOne();
+
+        return url;
+    }
 
 }
