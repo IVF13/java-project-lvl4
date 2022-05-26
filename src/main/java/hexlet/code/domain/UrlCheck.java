@@ -1,12 +1,13 @@
 package hexlet.code.domain;
 
+import io.ebean.Model;
 import io.ebean.annotation.WhenCreated;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public final class UrlCheck {
+public final class UrlCheck extends Model {
 
     @Id
     private long id;
@@ -30,12 +31,13 @@ public final class UrlCheck {
     public UrlCheck() {
     }
 
-    public UrlCheck(long id, int statusCode, String title, String h1, String description, Date createdAt) {
+    public UrlCheck(long id, int statusCode, String title, String h1, String description, Url url, Date createdAt) {
         this.id = id;
         this.statusCode = statusCode;
         this.title = title;
         this.h1 = h1;
         this.description = description;
+        this.url = url;
         this.createdAt = createdAt;
     }
 
@@ -83,4 +85,7 @@ public final class UrlCheck {
         this.description = description;
     }
 
+    public void setUrl(Url url) {
+        this.url = url;
+    }
 }
