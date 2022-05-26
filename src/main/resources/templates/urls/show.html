@@ -7,25 +7,51 @@
 </section>
 
 <section layout:fragment="content" th:object="${url}">
+
     <table class="table table-bordered table-hover mt-3">
         <tbody>
         <tr>
             <td>ID</td>
-            <td th:text="*{getId()}"></td>
+            <td th:text="${url.getId()}"></td>
         </tr>
         <tr>
             <td>Name</td>
-            <td th:text="*{getName()}"></td>
+            <td th:text="${url.getName()}"></td>
         </tr>
         <tr>
             <td>Date of creation</td>
-            <td th:text="*{getCreatedAt()}"></td>
+            <td th:text="${url.getCreatedAt()}"></td>
         </tr>
         </tbody>
     </table>
-        <!--        <div class="card-body bg-light">-->
-        <!--            <p class="lead" th:text="*{getDescription()}"></p>-->
-        <!--        </div>-->
+
+    <h2 class="mt-5">Recent checks</h2>
+    <form method="post" th:action="@{{id}/checks(id=${url.getId()})}">
+        <button type="submit" class="btn btn-primary">Run check</button>
+    </form>
+
+    <table class="table table-bordered table-hover mt-3">
+        <thead>
+        <th class="col-1">ID</th>
+        <th class="col-1">Response code</th>
+        <th>title</th>
+        <th>h1</th>
+        <th>description</th>
+        <th class="col-2">Check date</th>
+        </thead>
+
+        <tbody>
+        <tr th:each="urlCheck : ${url.getUrlChecks()}" th:object="${urlCheck}">
+            <td th:text="${urlCheck.getId()}"></td>
+            <td th:text="${urlCheck.getStatusCode()}"></td>
+            <td th:text="${urlCheck.getTitle()}"></td>
+            <td th:text="${urlCheck.getH1()}"></td>
+            <td th:text="${urlCheck.getDescription()}"></td>
+            <td th:text="${urlCheck.getCreatedAt()}"></td>
+        </tr>
+        </tbody>
+
+    </table>
 </section>
 
 </html>
