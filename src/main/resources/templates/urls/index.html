@@ -3,7 +3,7 @@
       layout:decorate="~{layouts/application.html}">
 
 <section layout:fragment="header">
-    Resources
+    Resources:
 </section>
 
 <section layout:fragment="content">
@@ -22,8 +22,8 @@
             <td>
                 <a th:href="@{/urls/{id}(id=*{getId()})}" th:text="${#strings.abbreviate(url.getName(), 30)}"></a>
             </td>
-<!--            <td th:text="${#strings.abbreviate(article.getDescription(), 60)}"></td>-->
-<!--            <td th:text="${#temporals.format(article.getCreatedAt(), 'dd/MM/yyyy HH:mm')}"></td>-->
+            <td th:text="${url.getUrlChecks().get(url.getUrlChecks().size()-1).getCreatedAt()}"></td>
+            <td th:text="*{getCreatedAt()}"></td>
         </tr>
         </tbody>
     </table>
@@ -41,6 +41,7 @@
             </li>
         </ul>
     </nav>
+
 </section>
 
 </html>
