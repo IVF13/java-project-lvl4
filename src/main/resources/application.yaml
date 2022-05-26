@@ -1,12 +1,13 @@
 datasource:
+  db:
     development:
-      username: sa
-      password: sa
-      url: "jdbc:h2:./database"
+    username: ""
+    password: ""
+    url: "jdbc:h2:./hexlet"
     production:
-        username: app
-        password: password
-        url: jdbc:postgresql://localhost:5432/app
+      username: app
+      password: password
+      url: jdbc:postgresql://localhost:5432/app
 
 ebean:
   db:
