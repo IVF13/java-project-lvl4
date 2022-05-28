@@ -8,13 +8,11 @@ import hexlet.code.domain.query.QUrlCheck;
 import io.ebean.DB;
 import io.ebean.Transaction;
 import io.javalin.Javalin;
-import io.javalin.http.HttpCode;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import mockwebserver3.MockResponse;
 import mockwebserver3.MockWebServer;
 import org.junit.jupiter.api.*;
-
 
 import java.io.IOException;
 import java.util.List;
