@@ -18,7 +18,10 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class ControllersTest {
     private static Javalin app;
@@ -136,18 +139,18 @@ public final class ControllersTest {
         }
 
         @Test
-        void testCreateCheck() throws IOException {
+        void testCreateCheck() throws IOException, InterruptedException {
+
             MockWebServer server = new MockWebServer();
 
-            String serverUrl = server.url("")
+            String serverUrl = server.url("/")
                     .toString()
                     .substring(0, server.url("").toString().length() - 1);
 
             MockResponse mockResponse = new MockResponse()
-                    .addHeader("Content-Type", "text/html; charset=utf-8")
-                    .addHeader("Cache-Control", "no-cache")
                     .setBody("Response Body");
 
+            server.enqueue(mockResponse);
             server.enqueue(mockResponse);
 
             server.start();
@@ -165,9 +168,11 @@ public final class ControllersTest {
 
             assertThat(response.getStatus()).isEqualTo(302);
             assertEquals(2, urlChecks.size());
-            server.close();
+
         }
 
     }
 
 }
+
+
