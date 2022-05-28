@@ -4,14 +4,18 @@ import hexlet.code.App;
 import hexlet.code.domain.Url;
 import hexlet.code.domain.UrlCheck;
 import hexlet.code.domain.query.QUrl;
+import hexlet.code.domain.query.QUrlCheck;
 import io.ebean.DB;
 import io.ebean.Transaction;
 import io.javalin.Javalin;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import mockwebserver3.MockResponse;
+import mockwebserver3.MockWebServer;
 import org.junit.jupiter.api.*;
 
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -32,12 +36,10 @@ public final class ControllersTest {
         int port = app.port();
         baseUrl = "http://localhost:" + port;
 
-        existingUrl = new Url();
-        existingUrl.setName("https://ru.hexlet.io");
+        existingUrl = new Url().setName("https://ru.hexlet.io");
         existingUrl.save();
 
-        existingUrlCheck = new UrlCheck();
-        existingUrlCheck.setUrl(new QUrl().name.equalTo(existingUrl.getName()).findOne());
+        existingUrlCheck = new UrlCheck().setUrl(new QUrl().name.equalTo(existingUrl.getName()).findOne());
         existingUrlCheck.save();
     }
 
@@ -135,8 +137,36 @@ public final class ControllersTest {
         }
 
         @Test
-        void testCreateCheck() {
+        void testCreateCheck() throws IOException {
+            MockWebServer server = new MockWebServer();
 
+            String serverUrl = server.url("")
+                    .toString()
+                    .substring(0, server.url("").toString().length() - 1);
+
+            MockResponse mockResponse = new MockResponse()
+                    .addHeader("Content-Type", "text/html; charset=utf-8")
+                    .addHeader("Cache-Control", "no-cache")
+                    .setBody("Response Body");
+
+            server.enqueue(mockResponse);
+
+            server.start();
+
+            Unirest.post(baseUrl + "/urls").field("url", serverUrl).asString();
+
+            Url mockUrl = new QUrl().name.equalTo(serverUrl).findOne();
+
+            HttpResponse<String> response = Unirest
+                    .post(baseUrl + "/urls/{id}/checks")
+                    .routeParam("id", String.valueOf(mockUrl.getId()))
+                    .asString();
+
+            List<UrlCheck> urlChecks = new QUrlCheck().url.equalTo(mockUrl).findList();
+
+            assertThat(response.getStatus()).isEqualTo(302);
+            assertEquals(2, urlChecks.size());
+            server.close();
         }
 
     }
