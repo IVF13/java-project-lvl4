@@ -133,7 +133,7 @@ public final class ControllersTest {
 
             Url url = new QUrl().name.equalTo(inputURL).findOne();
 
-            assertThat(response.getStatus()).isEqualTo(HttpCode.BAD_REQUEST);
+            assertThat(response.getStatus()).isEqualTo(400);
             assertNull(url);
         }
 
