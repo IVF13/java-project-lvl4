@@ -7,6 +7,10 @@ import io.ebean.PagedList;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpCode;
 import io.javalin.http.NotFoundResponse;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -96,7 +100,37 @@ public final class UrlsController {
 
     private static void runCheck(long id) {
         Url url = findUrl(id);
-        UrlCheck urlCheck = new UrlCheck().setTitle("LOL2").setUrl(url).setStatusCode(200);
+        UrlCheck urlCheck = new UrlCheck().setUrl(url);
+        HttpResponse<String> response = null;
+        Document doc = null;
+
+        try {
+            response = Unirest.get(url.getName()).asString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (response != null) {
+            doc = Jsoup.parseBodyFragment(response.getBody());
+            urlCheck.setStatusCode(response.getStatus());
+        } else {
+            urlCheck.setStatusCode(503);
+        }
+
+        if (doc.selectFirst("title") != null && doc.selectFirst("title").hasText()) {
+            urlCheck.setTitle(doc.selectFirst("title").text());
+        }
+
+        if (doc.selectFirst("h1") != null) {
+            urlCheck.setH1(doc.selectFirst("h1").firstElementSibling().text());
+        }
+
+        if (!doc.getElementsByAttributeValueMatching("name", "description").isEmpty()) {
+            urlCheck.setDescription(doc
+                    .getElementsByAttributeValueMatching("name", "description")
+                    .attr("content"));
+        }
+
 
         urlCheck.save();
     }
