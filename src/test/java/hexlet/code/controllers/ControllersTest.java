@@ -8,6 +8,7 @@ import hexlet.code.domain.query.QUrlCheck;
 import io.ebean.DB;
 import io.ebean.Transaction;
 import io.javalin.Javalin;
+import io.javalin.http.HttpCode;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import mockwebserver3.MockResponse;
@@ -132,7 +133,7 @@ public final class ControllersTest {
 
             Url url = new QUrl().name.equalTo(inputURL).findOne();
 
-            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getStatus()).isEqualTo(HttpCode.BAD_REQUEST);
             assertNull(url);
         }
 
