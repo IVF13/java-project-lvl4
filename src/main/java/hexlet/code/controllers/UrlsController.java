@@ -5,11 +5,11 @@ import hexlet.code.domain.UrlCheck;
 import hexlet.code.domain.query.QUrl;
 import io.ebean.PagedList;
 import io.javalin.http.Handler;
+import io.javalin.http.HttpCode;
 import io.javalin.http.NotFoundResponse;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -60,6 +60,7 @@ public final class UrlsController {
             e.printStackTrace();
             ctx.sessionAttribute("flash", "Incorrect URL");
             ctx.sessionAttribute("flash-type", "danger");
+            ctx.status(HttpCode.BAD_REQUEST);
             ctx.render("index.html");
             return;
         }
@@ -73,8 +74,7 @@ public final class UrlsController {
             ctx.sessionAttribute("flash", "Page already exists");
             ctx.sessionAttribute("flash-type", "success");
         } else {
-            Url url = new Url();
-            url.setName(name);
+            Url url = new Url().setName(name);
             url.save();
 
             ctx.sessionAttribute("flash", "Page successfully added");
@@ -95,15 +95,8 @@ public final class UrlsController {
     };
 
     private static void runCheck(long id) {
-        UrlCheck urlCheck = new UrlCheck();
         Url url = findUrl(id);
-        //установка параметров
-        urlCheck.setTitle("LOL2");
-        urlCheck.setUrl(url);
-        urlCheck.setStatusCode(200);
-
-        List<UrlCheck> urlChecks = new ArrayList<>();
-        urlChecks.add(urlCheck);
+        UrlCheck urlCheck = new UrlCheck().setTitle("LOL2").setUrl(url).setStatusCode(200);
 
         urlCheck.save();
     }
