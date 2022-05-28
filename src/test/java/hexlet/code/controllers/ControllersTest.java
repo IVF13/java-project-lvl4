@@ -153,8 +153,6 @@ public final class ControllersTest {
             server.enqueue(mockResponse);
             server.enqueue(mockResponse);
 
-//            server.start();
-
             Unirest.post(baseUrl + "/urls").field("url", serverUrl).asString();
 
             Url mockUrl = new QUrl().name.equalTo(serverUrl).findOne();
