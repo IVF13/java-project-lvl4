@@ -49,43 +49,49 @@ public final class UrlCheck extends Model {
         return statusCode;
     }
 
+    public UrlCheck setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+        return this;
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public UrlCheck setTitle(String title) {
+        this.title = title;
+        return this;
     }
 
     public String getH1() {
         return h1;
     }
 
+    public UrlCheck setH1(String h1) {
+        this.h1 = h1;
+        return this;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public UrlCheck setDescription(String description) {
+        this.description = description;
+        return this;
     }
 
     public Url getUrl() {
         return url;
     }
 
+    public UrlCheck setUrl(Url url) {
+        this.url = url;
+        return this;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setH1(String h1) {
-        this.h1 = h1;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setUrl(Url url) {
-        this.url = url;
-    }
 }

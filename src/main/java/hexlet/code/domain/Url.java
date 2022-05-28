@@ -39,20 +39,22 @@ public final class Url extends Model {
         return name;
     }
 
-    public void setName(String resourceName) {
-        this.name = resourceName;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
+    public Url setName(String name) {
+        this.name = name;
+        return this;
     }
 
     public List<UrlCheck> getUrlChecks() {
         return urlChecks;
     }
 
-    public void setUrlChecks(List<UrlCheck> urlChecks) {
+    public Url setUrlChecks(List<UrlCheck> urlChecks) {
         this.urlChecks = urlChecks;
+        return this;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
 }
