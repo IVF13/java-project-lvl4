@@ -10,18 +10,18 @@ import io.ebean.Transaction;
 import io.javalin.Javalin;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
-import mockwebserver3.MockResponse;
-import mockwebserver3.MockWebServer;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class ControllersTest {
     private static Javalin app;
@@ -153,7 +153,7 @@ public final class ControllersTest {
             server.enqueue(mockResponse);
             server.enqueue(mockResponse);
 
-            server.start();
+//            server.start();
 
             Unirest.post(baseUrl + "/urls").field("url", serverUrl).asString();
 
@@ -169,6 +169,7 @@ public final class ControllersTest {
             assertThat(response.getStatus()).isEqualTo(302);
             assertEquals(2, urlChecks.size());
 
+            server.close();
         }
 
     }
