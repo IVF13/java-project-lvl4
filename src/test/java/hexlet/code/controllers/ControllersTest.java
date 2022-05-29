@@ -139,7 +139,7 @@ public final class ControllersTest {
         }
 
         @Test
-        void testCreateCheck() throws IOException, InterruptedException {
+        void testCreateCheck() throws IOException {
 
             MockWebServer server = new MockWebServer();
 
@@ -165,7 +165,7 @@ public final class ControllersTest {
             List<UrlCheck> urlChecks = new QUrlCheck().url.equalTo(mockUrl).findList();
 
             assertThat(response.getStatus()).isEqualTo(302);
-            assertEquals(2, urlChecks.size());
+            assertEquals(1, urlChecks.size());
 
             server.close();
         }

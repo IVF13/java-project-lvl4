@@ -22,7 +22,7 @@
             <td>
                 <a th:href="@{/urls/{id}(id=*{getId()})}" th:text="${#strings.abbreviate(url.getName(), 30)}"></a>
             </td>
-            <td th:text="${url.getUrlChecks().get(url.getUrlChecks().size()-1).getCreatedAt()}"></td>
+            <td th:text="*{getLastCheck()}"></td>
             <td th:text="*{getCreatedAt()}"></td>
         </tr>
         </tbody>

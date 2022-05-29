@@ -57,4 +57,11 @@ public final class Url extends Model {
         return createdAt;
     }
 
+    public Date getLastCheck() {
+        if (!this.getUrlChecks().isEmpty()) {
+            return this.getUrlChecks().get(this.getUrlChecks().size() - 1).getCreatedAt();
+        }
+        return null;
+    }
+
 }

@@ -85,8 +85,6 @@ public final class UrlsController {
             ctx.sessionAttribute("flash-type", "success");
         }
 
-        runCheck(findUrl(name).getId());
-
         ctx.redirect("/urls");
     };
 
