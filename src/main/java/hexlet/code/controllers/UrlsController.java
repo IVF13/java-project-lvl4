@@ -81,7 +81,7 @@ public final class UrlsController {
             Url url = new Url().setName(name);
             url.save();
 
-            ctx.sessionAttribute("flash", "Страница успешно создана");
+            ctx.sessionAttribute("flash", "Страница успешно добавлена");
             ctx.sessionAttribute("flash-type", "success");
         }
 
@@ -91,31 +91,29 @@ public final class UrlsController {
     public static Handler createCheck = ctx -> {
         long id = ctx.pathParamAsClass("id", Integer.class).getOrDefault(null);
 
-        runCheck(id);
+        try {
+            runCheck(id);
+            ctx.sessionAttribute("flash", "Страница успешно проверена");
+            ctx.sessionAttribute("flash-type", "success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.sessionAttribute("flash", "java.net.UnknownHostException");
+            ctx.sessionAttribute("flash-type", "danger");
+        }
 
-        ctx.sessionAttribute("flash", "Страница успешно проверена");
-        ctx.sessionAttribute("flash-type", "success");
         ctx.redirect("/urls/" + id);
     };
 
-    private static void runCheck(long id) {
+    private static void runCheck(long id) throws Exception {
         Url url = findUrl(id);
         UrlCheck urlCheck = new UrlCheck().setUrl(url);
         HttpResponse<String> response = null;
         Document doc = null;
 
-        try {
-            response = Unirest.get(url.getName()).asString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        response = Unirest.get(url.getName()).asString();
 
-        if (response != null) {
-            doc = Jsoup.parseBodyFragment(response.getBody());
-            urlCheck.setStatusCode(response.getStatus());
-        } else {
-            urlCheck.setStatusCode(503);
-        }
+        doc = Jsoup.parseBodyFragment(response.getBody());
+        urlCheck.setStatusCode(response.getStatus());
 
         if (doc.selectFirst("title") != null && doc.selectFirst("title").hasText()) {
             urlCheck.setTitle(doc.selectFirst("title").text());
