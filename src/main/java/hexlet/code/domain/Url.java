@@ -64,4 +64,11 @@ public final class Url extends Model {
         return null;
     }
 
+    public Integer getLastStatusCode() {
+        if (!this.getUrlChecks().isEmpty()) {
+            return this.getUrlChecks().get(this.getUrlChecks().size() - 1).getStatusCode();
+        }
+        return null;
+    }
+
 }
