@@ -182,14 +182,14 @@ public final class ControllersTest {
 
             Unirest.post(baseUrl + "/urls").field("url", inputURL).asString();
 
-            Url Url = new QUrl().name.equalTo(inputURL).findOne();
+            Url url = new QUrl().name.equalTo(inputURL).findOne();
 
             HttpResponse<String> response = Unirest
                     .post(baseUrl + "/urls/{id}/checks")
-                    .routeParam("id", String.valueOf(Url.getId()))
+                    .routeParam("id", String.valueOf(url.getId()))
                     .asString();
 
-            List<UrlCheck> urlChecks = new QUrlCheck().url.equalTo(Url).findList();
+            List<UrlCheck> urlChecks = new QUrlCheck().url.equalTo(url).findList();
 
             assertThat(response.getStatus()).isEqualTo(302);
             assertEquals(0, urlChecks.size());

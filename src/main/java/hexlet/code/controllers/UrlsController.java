@@ -107,8 +107,8 @@ public final class UrlsController {
     private static void runCheck(long id) throws Exception {
         Url url = findUrl(id);
         UrlCheck urlCheck = new UrlCheck().setUrl(url);
-        HttpResponse<String> response = null;
-        Document doc = null;
+        HttpResponse<String> response;
+        Document doc;
 
         response = Unirest.get(url.getName()).asString();
 
