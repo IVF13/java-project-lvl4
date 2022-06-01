@@ -62,7 +62,7 @@ public final class UrlsController {
             inputURL = new URL(ctx.formParam("url"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            ctx.sessionAttribute("flash", "Incorrect URL");
+            ctx.sessionAttribute("flash", "Некорректный URL");
             ctx.sessionAttribute("flash-type", "danger");
             ctx.status(HttpCode.BAD_REQUEST);
             ctx.render("index.html");
@@ -75,13 +75,13 @@ public final class UrlsController {
         }
 
         if (findUrl(name) != null) {
-            ctx.sessionAttribute("flash", "Page already exists");
+            ctx.sessionAttribute("flash", "Страница уже существует");
             ctx.sessionAttribute("flash-type", "success");
         } else {
             Url url = new Url().setName(name);
             url.save();
 
-            ctx.sessionAttribute("flash", "Page successfully added");
+            ctx.sessionAttribute("flash", "Страница успешно создана");
             ctx.sessionAttribute("flash-type", "success");
         }
 
@@ -93,6 +93,8 @@ public final class UrlsController {
 
         runCheck(id);
 
+        ctx.sessionAttribute("flash", "Страница успешно проверена");
+        ctx.sessionAttribute("flash-type", "success");
         ctx.redirect("/urls/" + id);
     };
 
