@@ -72,7 +72,7 @@ public final class ControllersTest {
         void testIndex() {
             HttpResponse<String> response = Unirest.get(baseUrl).asString();
             assertThat(response.getStatus()).isEqualTo(200);
-            assertThat(response.getBody()).contains("Page analyzer");
+            assertThat(response.getBody()).contains("Анализатор страниц");
         }
 
     }
@@ -84,7 +84,7 @@ public final class ControllersTest {
         void testListUrls() {
             HttpResponse<String> response = Unirest.get(baseUrl + "/urls").asString();
             assertThat(response.getStatus()).isEqualTo(200);
-            assertThat(response.getBody()).contains("Resources");
+            assertThat(response.getBody()).contains("Сайты");
         }
 
         @Test
