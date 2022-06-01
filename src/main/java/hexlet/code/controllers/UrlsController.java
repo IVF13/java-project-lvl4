@@ -104,7 +104,7 @@ public final class UrlsController {
         ctx.redirect("/urls/" + id);
     };
 
-    private static void runCheck(long id) throws Exception {
+    public static void runCheck(long id) throws Exception {
         Url url = findUrl(id);
         UrlCheck urlCheck = new UrlCheck().setUrl(url);
         HttpResponse<String> response;

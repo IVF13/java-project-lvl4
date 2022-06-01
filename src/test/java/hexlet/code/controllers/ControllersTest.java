@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import static hexlet.code.controllers.UrlsController.runCheck;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -190,6 +191,38 @@ public final class ControllersTest {
 
             assertThat(response.getStatus()).isEqualTo(302);
             assertEquals(0, urlChecks.size());
+        }
+
+        @Test
+        void testRunCheck() throws Exception {
+
+            MockWebServer server = new MockWebServer();
+
+            String serverUrl = server.url("/")
+                    .toString()
+                    .substring(0, server.url("").toString().length() - 1);
+
+            MockResponse mockResponse = new MockResponse()
+                    .setResponseCode(302)
+                    .setBody("<title>Title</title>");
+
+            server.enqueue(mockResponse);
+            server.enqueue(mockResponse);
+
+            Unirest.post(baseUrl + "/urls").field("url", serverUrl).asString();
+
+            Url mockUrl = new QUrl().name.equalTo(serverUrl).findOne();
+
+            runCheck(mockUrl.getId());
+
+            List<UrlCheck> urlChecks = new QUrlCheck().url.equalTo(mockUrl).findList();
+
+            assertEquals(urlChecks.get(0).getId(), 1);
+            assertEquals(urlChecks.get(0).getStatusCode(), 302);
+            assertEquals(urlChecks.get(0).getTitle(), "Title");
+            assertNull(urlChecks.get(0).getH1());
+            assertNull(urlChecks.get(0).getDescription());
+            server.close();
         }
 
     }
