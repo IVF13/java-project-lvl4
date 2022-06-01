@@ -217,7 +217,6 @@ public final class ControllersTest {
 
             List<UrlCheck> urlChecks = new QUrlCheck().url.equalTo(mockUrl).findList();
 
-            assertEquals(urlChecks.get(0).getId(), 1);
             assertEquals(urlChecks.get(0).getStatusCode(), 302);
             assertEquals(urlChecks.get(0).getTitle(), "Title");
             assertNull(urlChecks.get(0).getH1());
