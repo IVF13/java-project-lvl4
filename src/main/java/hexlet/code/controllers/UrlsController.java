@@ -14,6 +14,7 @@ import org.jsoup.nodes.Document;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -95,7 +96,7 @@ public final class UrlsController {
             runCheck(id);
             ctx.sessionAttribute("flash", "Страница успешно проверена");
             ctx.sessionAttribute("flash-type", "success");
-        } catch (Exception e) {
+        } catch (UnknownHostException e) {
             e.printStackTrace();
             ctx.sessionAttribute("flash", "java.net.UnknownHostException");
             ctx.sessionAttribute("flash-type", "danger");
@@ -104,7 +105,7 @@ public final class UrlsController {
         ctx.redirect("/urls/" + id);
     };
 
-    private static void runCheck(long id) throws Exception {
+    private static void runCheck(long id) throws UnknownHostException {
         Url url = findUrl(id);
         UrlCheck urlCheck = new UrlCheck().setUrl(url);
         HttpResponse<String> response = null;
