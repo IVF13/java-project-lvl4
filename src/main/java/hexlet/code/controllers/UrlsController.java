@@ -96,7 +96,7 @@ public final class UrlsController {
             runCheck(id);
             ctx.sessionAttribute("flash", "Страница успешно проверена");
             ctx.sessionAttribute("flash-type", "success");
-        } catch (UnknownHostException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             ctx.sessionAttribute("flash", "java.net.UnknownHostException");
             ctx.sessionAttribute("flash-type", "danger");
@@ -105,7 +105,7 @@ public final class UrlsController {
         ctx.redirect("/urls/" + id);
     };
 
-    private static void runCheck(long id) throws UnknownHostException {
+    private static void runCheck(long id) throws Exception {
         Url url = findUrl(id);
         UrlCheck urlCheck = new UrlCheck().setUrl(url);
         HttpResponse<String> response = null;
