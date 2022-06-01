@@ -19,7 +19,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-
 import java.io.IOException;
 import java.util.List;
 
@@ -110,6 +109,7 @@ public final class ControllersTest {
             Url url = new QUrl().name.equalTo(inputURL).findOne();
 
             assertThat(response.getStatus()).isEqualTo(302);
+            assertThat(url.getName()).contains("https://www.example.com");
             assertNotNull(url);
         }
 
@@ -174,6 +174,25 @@ public final class ControllersTest {
             assertEquals(1, urlChecks.size());
 
             server.close();
+        }
+
+        @Test
+        void testCreateCheckUnknownHost() {
+            String inputURL = "https://ru.hexhgfhlet.io";
+
+            Unirest.post(baseUrl + "/urls").field("url", inputURL).asString();
+
+            Url Url = new QUrl().name.equalTo(inputURL).findOne();
+
+            HttpResponse<String> response = Unirest
+                    .post(baseUrl + "/urls/{id}/checks")
+                    .routeParam("id", String.valueOf(Url.getId()))
+                    .asString();
+
+            List<UrlCheck> urlChecks = new QUrlCheck().url.equalTo(Url).findList();
+
+            assertThat(response.getStatus()).isEqualTo(302);
+            assertEquals(0, urlChecks.size());
         }
 
     }
