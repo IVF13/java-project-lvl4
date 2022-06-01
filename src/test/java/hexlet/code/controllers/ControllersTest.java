@@ -20,6 +20,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -32,7 +33,6 @@ public final class ControllersTest {
     private static Javalin app;
     private static String baseUrl;
     private static Url existingUrl;
-    private static UrlCheck existingUrlCheck;
     private static Transaction transaction;
     private static String inputURL = "https://www.example.com";
 
@@ -45,9 +45,6 @@ public final class ControllersTest {
 
         existingUrl = new Url().setName("https://ru.hexlet.io");
         existingUrl.save();
-
-        existingUrlCheck = new UrlCheck().setUrl(new QUrl().name.equalTo(existingUrl.getName()).findOne());
-        existingUrlCheck.save();
     }
 
     @AfterAll
@@ -195,6 +192,30 @@ public final class ControllersTest {
             assertEquals(0, urlChecks.size());
         }
 
+    }
+
+    @Nested
+    class UrlEntityUtilTest {
+
+        @Test
+        void testGetLastCheck() {
+            existingUrl.setUrlChecks(List.of(new UrlCheck(1, 200, "title1",
+                            "h11", "description1", existingUrl, new Date()),
+                    new UrlCheck(2, 302, "title2", "h12",
+                            "description2", existingUrl, new Date(100))));
+
+            assertEquals(existingUrl.getLastCheck().getTime(), new Date(100).getTime());
+        }
+
+        @Test
+        void testGetLastStatusCode() {
+            existingUrl.setUrlChecks(List.of(new UrlCheck(1, 200, "title1",
+                            "h11", "description1", existingUrl, new Date()),
+                    new UrlCheck(2, 302, "title2", "h12",
+                            "description2", existingUrl, new Date(100))));
+
+            assertEquals(existingUrl.getLastStatusCode(), 302);
+        }
     }
 
 }
