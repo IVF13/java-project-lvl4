@@ -11,6 +11,6 @@ Page Analyzer is a microservice that analyzes specific websites for SEO suitabil
 1. Clone this repository to your machine by ```$git clone https://github.com/IVF13/java-project-lvl4``` or by your IDE features.  
 2. Do install by ```$make install```
 3. Run it by ```$make run-dist``` 
-4. Open app on ```[localhost:5000](http://localhost:5000/)``` address  
+4. Open app on [localhost:5000](http://localhost:5000/) address  
   
   Also you can run it by your IDE just by running the App class.  
