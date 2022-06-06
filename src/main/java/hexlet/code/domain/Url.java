@@ -63,14 +63,14 @@ public final class Url extends Model {
 
     public Date getLastCheck() {
         if (!this.getUrlChecks().isEmpty()) {
-            return this.getUrlChecks().get(this.getUrlChecks().size() - 1).getCreatedAt();
+            return this.getUrlChecks().get(0).getCreatedAt();
         }
         return null;
     }
 
     public Integer getLastStatusCode() {
         if (!this.getUrlChecks().isEmpty()) {
-            return this.getUrlChecks().get(this.getUrlChecks().size() - 1).getStatusCode();
+            return this.getUrlChecks().get(0).getStatusCode();
         }
         return null;
     }
