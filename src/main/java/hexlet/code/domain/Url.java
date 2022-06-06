@@ -6,8 +6,11 @@ import io.ebean.annotation.WhenCreated;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public final class Url extends Model {
@@ -45,7 +48,9 @@ public final class Url extends Model {
     }
 
     public List<UrlCheck> getUrlChecks() {
-        return urlChecks;
+        return urlChecks.stream()
+                .sorted(Comparator.comparing(UrlCheck::getId).reversed())
+                .collect(Collectors.toList());
     }
 
     public Url setUrlChecks(List<UrlCheck> urlChecks) {
